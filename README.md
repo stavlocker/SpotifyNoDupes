@@ -15,8 +15,12 @@ _Why?_ Because...
 ![image](https://user-images.githubusercontent.com/30472563/39255472-4c0c4f20-48b5-11e8-9d36-3adc0bed5f0a.png)
 <sup>*\* The web server after authenticating. This only needs to be done once (per user).*</sup>
 
+![image](https://user-images.githubusercontent.com/30472563/39919348-fe84c430-551b-11e8-85b5-0398e4b461e5.png)
+![image](https://user-images.githubusercontent.com/30472563/39919433-490773c2-551c-11e8-9201-40c0f0516bf9.png)
+<sup>*\* The program output for the following playlist "My Playlist".</sup>
+
 ## Required packages
-To use SpotifyNoDupes, you need [spotipy](https://github.com/plamere/spotipy). You can install it using `pip`: `pip3 install spotipy`
+This program uses Python 3. To use SpotifyNoDupes, you need [spotipy](https://github.com/plamere/spotipy). You can install it using `pip`: `pip install spotipy`
 If you know how to use `virtualenv`s it is recommended you use one:
 ```
 mkvirtualenv spotifynodupes
@@ -35,6 +39,9 @@ The script can be ran by executing the file `main`, and using the CLI interface 
 You can also give that information as an argument, like so: `main.py yourusername Playlist1 Playlist2 Playlist3`. You can either put the ID of the playlist or it's name. Notice that these have to be playlists owned by you.
 
 For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials. _Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API._
+## Known Bugs
+ * The program removes all identical songs (the duplicates that even spotify recognizes - just 2 exact same songs in the playlists) instead of just one.
+ * The program treats local files as duplicates.
 
 ## FAQ
 **Q:** Which permissions do I need to give the program access on Spotify to, and why?
