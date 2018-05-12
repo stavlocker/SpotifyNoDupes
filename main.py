@@ -106,7 +106,7 @@ def validate_songs_to_remove(possible_duplicates):
 
 # Returns the suspicion message or None if there is no suspicion the songs are the same.
 def are_songs_duplicates(s1, s2):
-    if s1['track']['id'] == s2['track']['id']:
+    if s1['track']['id'] == s2['track']['id'] and s1['track']['id'] != None:
         return color.RED + "IDENTICAL SONGS!"
     elif s1['track']['name'] == s2['track']['name']:
         return color.RED + "Identical " + color.CYAN + "names"

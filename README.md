@@ -41,7 +41,6 @@ You can also give that information as an argument, like so: `main.py yourusernam
 For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials. _Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API._
 ## Known Bugs
  * The program removes all identical songs (the duplicates that even spotify recognizes - just 2 exact same songs in the playlists) instead of just one.
- * The program treats local files as duplicates.
 
 ## FAQ
 **Q:** Which permissions do I need to give the program access on Spotify to, and why?
