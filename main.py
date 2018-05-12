@@ -140,11 +140,9 @@ def main():
     if playlists is None:
         return
 
-    possible_duplicates = []
-    # TODO In possible_duplicates put the pairs of the songs so even for two songs "A" and "B" that were suspected as identical
-    # don't appear twice in the list (because it may be the same song).
     suspicion_idx = 1
     for playlist in playlists:
+        possible_duplicates = []
         print(color.BLUE+"Possible duplicates in {}: (Skipping songs that appear identical)".format(playlist)+color.END)
         if not set_playlist(tool, playlist):
             print(color.RED+"WARNING: Playlist {} was not found".format(playlist)+color.END)
@@ -174,15 +172,19 @@ def main():
                     possible_duplicates.append(track)
                     print(color.BLUE+"|-- {}. ".format(suspicion_idx)+color.YELLOW+name+color.PURPLE+" VS "+color.YELLOW+other['track']['name']+color.PURPLE+" by {}: {}".format(artist_name, suspicion)+color.END)
                     suspicion_idx += 1
-        choice = input("Do you want to begin removing duplicates? [Y/n]")
-        if choice.lower() != 'n':
-            validate_songs_to_remove(possible_duplicates)
-
-            # The list was finalized. Get removing!
-            for x in possible_duplicates:
-                print(color.BLUE+"Removing {}...".format(x['track']['name'])+color.END)
-                tool.remove_track_by_id(x['track']['id'])
-            print(color.GREEN+"Successfully removed {} songs from {}.".format(str(playlist_size-len(tool.get_playlist_tracks())), playlist))
+        if not possible_duplicates:
+            print(color.GREEN+"No duplicates found in {}.".format(playlist)+color.END)
+            print()
+        else:
+            choice = input("Do you want to begin removing duplicates? [Y/n]")
+            if choice.lower() != 'n':
+                validate_songs_to_remove(possible_duplicates)
+                # The list was finalized. Get removing!
+                for x in possible_duplicates:
+                    print(color.BLUE+"Removing {}...".format(x['track']['name'])+color.END)
+                    tool.remove_track_by_id(x['track']['id'])
+                print(color.GREEN+"Successfully removed {} songs from {}.".format(str(playlist_size-len(tool.get_playlist_tracks())), playlist))
+				print()
 
 if __name__ == "__main__":
     main()
