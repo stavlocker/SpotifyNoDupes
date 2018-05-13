@@ -36,8 +36,10 @@ pip install spotipy
 
 The script can be ran by executing the file `main`, and using the CLI interface to use the program. In this case, the program will ask you for your username and the playlist(s) you want to de-dupe.
 
-You can also give that information as an argument, like so: `main.py yourusername Playlist1 Playlist2 Playlist3`. You can either put the ID of the playlist or it's name. Notice that these have to be playlists owned by you.
-
+The usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
+ - `Username`: Your username
+ - `Playlist1, Playlist2, Playlist3...` - As many playlists as you like, as the playlist's ID or name. Notice that these playlists must be owned by you
+ 
 For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials. _Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API._
 ## Known Bugs
  * The program removes all identical songs (the duplicates that even spotify recognizes - just 2 exact same songs in the playlists) instead of just one.
