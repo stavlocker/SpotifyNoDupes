@@ -111,18 +111,22 @@ class SpotifyTool:
         if self._playlist is None:
             raise NotFound("No playlist found")
 
-    def set_playlist_by_name(self, name):
-        self._playlist = self.__find_playlist__(name)
+    def set_playlist_by_name(self, name, ignore_case = False):
+        self._playlist = self.__find_playlist__(name, ignore_case)
 
         if self._playlist is None:
             raise NotFound("No playlist found")
 
-    def __find_playlist__(self, name):
+    def __find_playlist__(self, name, ignore_case = False):
         playlists = self._sp.user_playlists(self._username)
 
         for item in playlists["items"]:
-            if item["name"] == name:
-                return item
+            if ignore_case:
+                if item["name"].lower() == name.lower():
+                    return item
+            else:
+                if item["name"] == name:
+                    return item
         return None
 
     def get_playlist_tracks(self):
@@ -131,9 +135,22 @@ class SpotifyTool:
         while results['next']:
             results = self._sp.next(results)
             tracks.extend(results['items'])
+        self._tracks = tracks
         return tracks
 
-    def remove_track_by_id(self, id):
+    def remove_all_tracks_but_one_by_id(self, id):
+        position = 0
+        prev_pos = -1
+        positions = []
+        for track in self._tracks:
+            if track['track']['id'] == id:
+                if prev_pos != -1:
+                    positions.append(prev_pos)
+                prev_pos = position
+        if positions:
+            self._sp.user_playlist_remove_specific_occurrences_of_tracks(self._username, self._playlist['id'], {'uri': id, 'positions': positions})
+
+    def remove_all_occurrences_track_by_id(self, id):
         self._sp.user_playlist_remove_all_occurrences_of_tracks(self._username, self._playlist['id'], [id])
 
     def get_all_playlists(self):
