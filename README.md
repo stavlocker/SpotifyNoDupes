@@ -16,7 +16,7 @@ _Why?_ Because...
 <sup>*\* The web server after authenticating. This only needs to be done once (per user).*</sup>
 
 ![image](https://user-images.githubusercontent.com/30472563/39919348-fe84c430-551b-11e8-85b5-0398e4b461e5.png)
-![image](https://user-images.githubusercontent.com/30472563/39919433-490773c2-551c-11e8-9201-40c0f0516bf9.png)
+![image](https://user-images.githubusercontent.com/30472563/40512222-d1c96b00-5faa-11e8-9aba-78cc123d7104.png)
 <sup>*\* The program output for the following playlist "My Playlist".</sup>
 
 ## Required packages
