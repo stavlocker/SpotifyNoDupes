@@ -135,23 +135,11 @@ class SpotifyTool:
         while results['next']:
             results = self._sp.next(results)
             tracks.extend(results['items'])
-        self._tracks = tracks
         return tracks
 
-    def remove_all_tracks_but_one_by_id(self, id):
-        position = 0
-        prev_pos = -1
-        positions = []
-        for track in self._tracks:
-            if track['track']['id'] == id:
-                if prev_pos != -1:
-                    positions.append(prev_pos)
-                prev_pos = position
-        if positions:
-            self._sp.user_playlist_remove_specific_occurrences_of_tracks(self._username, self._playlist['id'], {'uri': id, 'positions': positions})
-
-    def remove_all_occurrences_track_by_id(self, id):
-        self._sp.user_playlist_remove_all_occurrences_of_tracks(self._username, self._playlist['id'], [id])
+    def remove_specific_track(self, id, pos):
+        self._sp.user_playlist_remove_specific_occurrences_of_tracks(self._username, self._playlist['id'],
+                                                                     [{'uri': id, 'positions': [pos]}])
 
     def get_all_playlists(self):
         playlist_list = []

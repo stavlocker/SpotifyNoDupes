@@ -33,14 +33,14 @@ def set_playlist_by_id(tool, playlist):
         return False
     return True
 
-def set_playlist(tool, playlist):
-    return set_playlist_by_name(tool, playlist) or set_playlist_by_id(tool, playlist)
+def set_playlist(tool, playlist, ignore_case = False):
+    return set_playlist_by_name(tool, playlist, ignore_case) or set_playlist_by_id(tool, playlist)
 
 def get_playlists_by_input(spotifytool):
-    user_playlists = [x['name'] for x in spotifytool.get_all_playlists()]
-    print("User playlists:")
+    user_playlists = spotifytool.get_all_playlists()
+    print("Your playlists:")
     for i, item in enumerate(user_playlists):
-        print("{}: {}".format(i + 1, item))
+        print("{}: {}".format(i + 1, item['name']))
 
     while True:
         picks = input("Enter the # of the playlist(s), separated by comma, or 'cancel' to cancel: ")
@@ -64,7 +64,7 @@ def get_playlists_by_input(spotifytool):
                     print("The number must be between {}-{}.".format(1, len(user_playlists)))
                     continue
 
-                playlists.append(user_playlists[pick - 1])
+                playlists.append(user_playlists[pick - 1]['id'])
         break
 
     return playlists
@@ -77,8 +77,10 @@ def validate_songs_to_remove(possible_duplicates):
             print()
             if prev_list_size != len(possible_duplicates):
                 for i, x in enumerate(possible_duplicates):
-                    print(Color.BLUE + str(i + 1) + ". " + Color.YELLOW + x['track']['name'] + Color.PURPLE + " by " +
-                          x['track']['artists'][0]['name'] + Color.END)
+                    print("{blue}{}. {yellow}{} {purple}(#{}) by {}{end}".format(
+                        i + 1, x['track']['name'], x['position'], x['track']['artists'][0]['name'],
+                        blue = Color.BLUE, yellow = Color.YELLOW, purple = Color.PURPLE, end=Color.END
+                    ))
             choice = input(
                 Color.YELLOW + "All songs above are to be removed. Enter the #s of the possible duplicates you wish to keep in the playlist, or 'CONTINUE' to remove all songs above: " + Color.END)
             if choice.lower() == 'continue':
@@ -103,6 +105,9 @@ def validate_songs_to_remove(possible_duplicates):
         except ContinueIteration:
             prev_list_size = len(possible_duplicates)
             continue
+
+def calculate_positions(tracks):
+    return [{**x, 'position': i} for i, x in enumerate(tracks)] # Update position for each track
 
 # Returns the suspicion message or None if there is no suspicion the songs are the same.
 def are_songs_duplicates(s1, s2):
@@ -144,14 +149,16 @@ def main():
     for playlist in playlists:
         possible_duplicates = []
         print(Color.BLUE + "Possible duplicates in {}: (Skipping songs that appear identical)".format(playlist) + Color.END)
-        if not set_playlist(tool, playlist):
+        if not set_playlist(tool, playlist, True):
             print(Color.RED + "WARNING: Playlist {} was not found".format(playlist) + Color.END)
             continue
-        tool.set_playlist_by_name(playlist)
+
         tracks = tool.get_playlist_tracks()
         playlist_size = len(tracks)
+        tracks = calculate_positions(tracks)
         # TODO Sort list by artist and only compare each song from the ones by the same artist for more efficiency
         for track in tracks:
+            position = track['position']
             data = track['track']
             name = data['name']
             artist_id = data['artists'][0]['id']
@@ -159,7 +166,7 @@ def main():
 
             ok = True
             for dup in possible_duplicates:
-                if are_songs_duplicates(track, dup):
+                if dup == track:
                     ok = False
 
             if not ok:
@@ -170,8 +177,10 @@ def main():
                     continue
                 suspicion = are_songs_duplicates(track, other)
                 if suspicion is not None:
-                    possible_duplicates.append(track)
-                    print(Color.BLUE + "|-- {}. ".format(suspicion_idx) + Color.YELLOW + name + Color.PURPLE + " VS " + Color.YELLOW + other['track']['name'] + Color.PURPLE + " by {}: {}".format(artist_name, suspicion) + Color.END)
+                    possible_duplicates.append(other)
+                    print("{blue}{}. {yellow}{: <28} {purple}(#{}) vs {yellow}{: <28}{purple} (#{}) by {}: {}{end}".format(
+                        suspicion_idx, name, position + 1, other['track']['name'], other['position'] + 1, artist_name, suspicion,
+                        blue=Color.BLUE, yellow=Color.YELLOW, purple=Color.PURPLE, end=Color.END))
                     suspicion_idx += 1
         if not possible_duplicates:
             print(Color.GREEN + "No duplicates found in {}.".format(playlist) + Color.END)
@@ -181,10 +190,19 @@ def main():
             if choice.lower() != 'n':
                 validate_songs_to_remove(possible_duplicates)
                 # The list was finalized. Get removing!
+                removed_positions = []
                 for x in possible_duplicates:
                     print(Color.BLUE + "Removing {}...".format(x['track']['name']) + Color.END)
-                    print(str(x['track'])+Color.GREEN+" and "+Color.END+str(x['track']['id']))
-                    tool.remove_all_tracks_but_one_by_id(x['track']['id'])
+                    position = x['position']
+
+                    # Update the position to match the modified list
+                    for i, pos in enumerate(removed_positions):
+                        if pos - i < position:
+                            position -= 1
+
+                    tool.remove_specific_track(x['track']['id'], position)
+                    removed_positions.append(position)
+                    tracks = calculate_positions(tool.get_playlist_tracks()) # Recalculate positions after removal
                 print(Color.GREEN + "Successfully removed {} songs from {}.".format(str(playlist_size - len(tool.get_playlist_tracks())), playlist))
                 print()
 
