@@ -150,7 +150,7 @@ def main():
         possible_duplicates = []
         print(Color.BLUE + "Possible duplicates in {}: (Skipping songs that appear identical)".format(playlist) + Color.END)
         if not set_playlist(tool, playlist, True):
-            print(Color.RED + "WARNING: Playlist {} was not found".format(playlist) + Color.END)
+            print(Color.RED + "ERROR: Playlist {} was not found".format(playlist) + Color.END)
             continue
 
         tracks = tool.get_playlist_tracks()
