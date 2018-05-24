@@ -27,10 +27,10 @@ mkvirtualenv spotifynodupes
 pip install spotipy
 ```
 ## Setup
-
-1. Create a spotify application so you can use `spotipy`. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/).
-2. Put your client ID & client secret into `spotifyauth.py`. The default redirect URL is `http://localhost:14523` for the local webserver.
-3. You're done - you can basically change anything else you'd like.
+1. Clone the repository (*or download as zip & extract*, cloning is recommended)
+2. Create a spotify application so you can use `spotipy`. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/).
+3. Put your client ID & client secret into `spotifyauth.py`. The default redirect URL is `http://localhost:14523` for the local webserver.
+4. You're done - you can basically change anything else you'd like.
 
 ## Run
 
