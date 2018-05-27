@@ -1,4 +1,6 @@
 # SpotifyNoDupes
+<p align="center"><img src="SpotifyNoDupes.png" width="350"/></p> <!-- Gross HTML because of GitHub's markdown -->
+
 Detect and remove possible duplicates in your playlists.
 This program can detect possible duplicates in your playlists and remove them for you. The program suspects that two songs are the same ones if:
  1. They have the same ID (meaning they are the exact same song), making it a 100% sure case
