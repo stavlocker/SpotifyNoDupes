@@ -1,3 +1,7 @@
 .idea
 __pycache__
 .cache-*
+*.spec
+build
+dist
+icon.ico
