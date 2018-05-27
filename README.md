@@ -34,8 +34,14 @@ pip install spotipy
 4. You're done - you can basically change anything else you'd like.
 
 ## Run
+1. Using the `.exe` release file: 
+    1. Download the `SpotifyNoDupes.exe` release file from the [release section](https://github.com/stavlocker/SpotifyNoDupes/releases)
+    2. Put the file in a directory of your choice (Notice that it will create cache files in the folder that it's in)
+    3. Open the command prompt and run the file (using `SpotifyNoDupes.exe`) or simply double click on the file to open it.
+2. Cloning the repository:
+    1. Clone the 
 
-The script can be ran by executing the file `main`, and using the CLI interface to use the program. In this case, the program will ask you for your username and the playlist(s) you want to de-dupe.
+The script can be ran by executing the `main.py` file, and using the CLI interface to use the program. In this case, the program will ask you for your username and the playlist(s) you want to de-dupe.
 
 The usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
  - `Username`: Your username
@@ -58,6 +64,15 @@ There's a reason this repository is open source. You are very welcome to contrib
 
 You are also very welcome to submit issues about bugs, improvements, ideas, questions and anything you'd like about this repository.
 
+In order to issue pull requests, you'll need to make a fork of this repository, commit to that fork, and then open PRs from your fork:
+1. Create a fork of the repository (Use the fork button in the top right corner in github)
+2. Clone your fork in a directory of your choice, and keep the upstream updated:
+```
+git clone https://github.com/you/SpotifyNoDupes.git`
+git remote add upstream git://github.com/nonamesl/SpotifyNoDupes.git
+git fetch upstream
+```
+3. Use `git pull upstream master` to keep up with changes from this repository. Most GUI git clients will work as expected and some might offer you to submit PRs to the original repo.
 ## See also
 If you liked SpotifyNoDupes, you'll love [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer), a python script to finally truly randomize your playlists (which I contributed a lot to :wink:). Thanks [@DanielsWrath](https://github.com/DanielsWrath) for inspiration from the [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer) repository.
 
