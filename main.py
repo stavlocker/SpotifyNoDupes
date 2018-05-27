@@ -3,7 +3,7 @@ import re
 import spotifyauth as sa
 
 sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
-
+VERSION = "1.0.0"
 
 class Color:
     PURPLE = '\033[95m'
@@ -19,7 +19,7 @@ class ContinueIteration(Exception):
     pass
 
 
-def set_playlist_by_name(tool, playlist, ignore_case = False):
+def set_playlist_by_name(tool, playlist, ignore_case=False):
     try:
         tool.set_playlist_by_name(playlist, ignore_case)
     except sa.NotFound:
@@ -36,8 +36,7 @@ def set_playlist_by_id(tool, playlist):
 def set_playlist(tool, playlist, ignore_case = False):
     return set_playlist_by_name(tool, playlist, ignore_case) or set_playlist_by_id(tool, playlist)
 
-def get_playlists_by_input(spotifytool):
-    user_playlists = spotifytool.get_all_playlists()
+def get_playlists_by_input(user_playlists):
     print("Your playlists:")
     for i, item in enumerate(user_playlists):
         print("{}: {}".format(i + 1, item['name']))
@@ -64,7 +63,7 @@ def get_playlists_by_input(spotifytool):
                     print("The number must be between {}-{}.".format(1, len(user_playlists)))
                     continue
 
-                playlists.append(user_playlists[pick - 1]['id'])
+                playlists.append({'id': user_playlists[pick - 1]['id'], 'name': user_playlists[pick - 1]['name']})
         break
 
     return playlists
@@ -82,9 +81,10 @@ def validate_songs_to_remove(possible_duplicates):
                         blue = Color.BLUE, yellow = Color.YELLOW, purple = Color.PURPLE, end=Color.END
                     ))
             choice = input(
-                Color.YELLOW + "All songs above are to be removed. Enter the #s of the possible duplicates you wish to keep in the playlist, or 'CONTINUE' to remove all songs above: " + Color.END)
+                Color.YELLOW + "All songs above are to be removed. Enter the #s separated by comma of the possible duplicates you wish to keep in the playlist, or 'CONTINUE' to remove all songs above: " + Color.END)
             if choice.lower() == 'continue':
                 break
+            to_remove = [] # So multi removing won't have it's numbers change in the middle of looping
             for pick in choice.split(","):
                 pick = pick.strip()
 
@@ -98,16 +98,22 @@ def validate_songs_to_remove(possible_duplicates):
                         print(Color.RED + "ERROR: The number {} is not between {}-{}.".format(pick, 1, len(
                             possible_duplicates)) + Color.END)
                         raise ContinueIteration()
-                    print(Color.CYAN + "Removing #{} ({}) from the list.".format(pick,
-                                                                                 possible_duplicates[pick - 1]['track'][
-                                                                                     'name']))
-                    possible_duplicates.remove(possible_duplicates[pick - 1])
+                    to_remove.append(pick)
+
+            removed_positions = []
+            for pick in to_remove:
+                for pos in removed_positions:
+                    if pos < pick - 1:
+                        pick -= 1
+                print(Color.CYAN + "Removing {} from the list.".format(possible_duplicates[pick - 1]['track']['name']))
+                possible_duplicates.remove(possible_duplicates[pick - 1])
+                removed_positions.append(pick - 1)
         except ContinueIteration:
             prev_list_size = len(possible_duplicates)
             continue
 
 def calculate_positions(tracks):
-    return [{**x, 'position': i} for i, x in enumerate(tracks)] # Update position for each track
+    return [{**x, 'position': i} for i, x in enumerate(tracks)]  # Update position for each track
 
 # Returns the suspicion message or None if there is no suspicion the songs are the same.
 def are_songs_duplicates(s1, s2):
@@ -120,6 +126,7 @@ def are_songs_duplicates(s1, s2):
     return None
 
 def main():
+    print(Color.BLUE+"-=== SpotifyNoDupes by "+Color.CYAN+"stavlocker"+Color.BLUE+" v{} ===-".format(VERSION)+Color.END)
     if len(sys.argv) > 1:
         username = sys.argv[1]
     else:
@@ -137,22 +144,33 @@ def main():
 
     tool = sa.SpotifyTool(username, auth.get_spotify())
 
-    if len(sys.argv) > 2:
-        playlists = sys.argv[2:]
-    else:
-        playlists = get_playlists_by_input(tool)
+    all_playlists = tool.get_user_playlists()
 
-    if playlists is None:
+    if len(sys.argv) > 2:
+        playlists_data = []
+        for arg in sys.argv[2:]:
+            found = None
+            for playlist in all_playlists:
+                if arg == playlist['name'] or arg == playlist['id']:
+                    found = {'id': playlist['id'], 'name': playlist['name']}
+            if not found:
+                print(Color.RED + "ERROR: Playlist '{}' was not found.".format(arg) + Color.END)
+            else:
+                playlists_data.append(found)
+    else:
+        playlists_data = get_playlists_by_input(all_playlists)
+
+    if playlists_data is None:
         return
 
     suspicion_idx = 1
-    for playlist in playlists:
+    for playlist in playlists_data:
         possible_duplicates = []
-        print(Color.BLUE + "Possible duplicates in {}: (Skipping songs that appear identical)".format(playlist) + Color.END)
-        if not set_playlist(tool, playlist, True):
-            print(Color.RED + "ERROR: Playlist {} was not found.".format(playlist) + Color.END)
+        if not set_playlist(tool, playlist['id'], True):
+            print(Color.RED + "ERROR: Playlist '{}' was not found.".format(playlist['name']) + Color.END)
             continue
 
+        print(Color.BLUE + "Possible duplicates in {}: (Skipping songs that appear identical)".format(playlist['name']) + Color.END)
         tracks = tool.get_playlist_tracks()
         playlist_size = len(tracks)
         tracks = calculate_positions(tracks)
@@ -183,7 +201,7 @@ def main():
                         blue=Color.BLUE, yellow=Color.YELLOW, purple=Color.PURPLE, end=Color.END))
                     suspicion_idx += 1
         if not possible_duplicates:
-            print(Color.GREEN + "No duplicates found in {}.".format(playlist) + Color.END)
+            print(Color.GREEN + "No duplicates found in {}.".format(playlist['name']) + Color.END)
             print()
         else:
             choice = input("Do you want to begin removing duplicates? [Y/n]")
@@ -203,7 +221,7 @@ def main():
                     tool.remove_specific_track(x['track']['id'], position)
                     removed_positions.append(position)
                     tracks = calculate_positions(tool.get_playlist_tracks()) # Recalculate positions after removal
-                print(Color.GREEN + "Successfully removed {} songs from {}.".format(str(playlist_size - len(tool.get_playlist_tracks())), playlist))
+                print(Color.GREEN + "Successfully removed {} songs from {}.".format(str(playlist_size - len(tool.get_playlist_tracks())), playlist['name']))
                 print()
 
 
