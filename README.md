@@ -1,5 +1,4 @@
-# SpotifyNoDupes
-<p align="center"><img src="SpotifyNoDupes.png" width="350"/></p> <!-- Gross HTML because of GitHub's markdown -->
+<p align="center"><img alt="SpotifyNoDupes" src="SpotifyNoDupes.png" width="350"/></p> <!-- Gross HTML because of GitHub's markdown -->
 
 Detect and remove possible duplicates in your playlists.
 This program can detect possible duplicates in your playlists and remove them for you. The program suspects that two songs are the same ones if:
@@ -61,3 +60,6 @@ You are also very welcome to submit issues about bugs, improvements, ideas, ques
 
 ## See also
 If you liked SpotifyNoDupes, you'll love [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer), a python script to finally truly randomize your playlists (which I contributed a lot to :wink:). Thanks [@DanielsWrath](https://github.com/DanielsWrath) for inspiration from the [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer) repository.
+
+---
+<i><sup>This program is not affiliated with Spotify<sup>®</sup> in any way (other than using their awesome API to provide you this service).</sup></i>
