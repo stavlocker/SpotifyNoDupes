@@ -1,3 +1,9 @@
+<!--
+  Title: SpotifyNoDupes
+  Description: The smart Spotify duplicate remover
+  Author: stavlocker
+-->
+<meta name='keywords' content='spotify, playlist, duplicate'>
 <p align="center"><img alt="SpotifyNoDupes - The Spotify duplicate remover" src="SpotifyNoDupes.png" width="350"/></p> <!-- Gross HTML because of GitHub's markdown flavour -->
 
 Detect and remove possible duplicates in your playlists.
