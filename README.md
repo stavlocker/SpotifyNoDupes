@@ -27,7 +27,8 @@ _Why?_ Because...
 <sup>*\* The program output for the following playlist "My Playlist".</sup>
 
 ## Run
-### Regular running from the release file
+### ~Regular running from the release file~
+_**NOTE**: Currently, the `.exe` file is broken as there is no way to set the credentials._
 The only requirements to run the release files are a Windows computer with Python 3.x installed.
 1. Download the `SpotifyNoDupes.exe` release file from the [release section](https://github.com/stavlocker/SpotifyNoDupes/releases)
 2. Put the file in a directory of your choice (Notice that it will create cache files in the folder that it's in)
@@ -88,6 +89,10 @@ git remote add upstream git://github.com/nonamesl/SpotifyNoDupes.git
 git fetch upstream
 ```
 3. Use `git pull upstream master` to keep up with changes from this repository. Most GUI git clients will work as expected and some might offer you to submit PRs to the original repo.
+
+## Known Bugs
+ * The `.exe` release file currently doesn't work as there is no way to set the credentials.
+
 ## See also
 If you liked SpotifyNoDupes, you'll love [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer), a python script to finally truly randomize your playlists (which I contributed a lot to :wink:). Thanks [@DanielsWrath](https://github.com/DanielsWrath) for inspiration from the [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer) repository.
 
