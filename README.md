@@ -26,35 +26,40 @@ _Why?_ Because...
 ![image](https://user-images.githubusercontent.com/30472563/40512222-d1c96b00-5faa-11e8-9aba-78cc123d7104.png)
 <sup>*\* The program output for the following playlist "My Playlist".</sup>
 
-## Required packages
-This program uses Python 3. To use SpotifyNoDupes, you need [spotipy](https://github.com/plamere/spotipy). You can install it using `pip`: `pip install spotipy`
-If you know how to use `virtualenv`s it is recommended you use one:
-```
-mkvirtualenv spotifynodupes
-pip install spotipy
-```
-## Setup
-1. Clone the repository (*or download as zip & extract*, cloning is recommended)
-2. Create a spotify application so you can use `spotipy`. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/).
-3. Put your client ID & client secret into `spotifyauth.py`. The default redirect URL is `http://localhost:14523` for the local webserver.
-4. You're done - you can basically change anything else you'd like.
-
 ## Run
-1. Using the `.exe` release file: 
-    1. Download the `SpotifyNoDupes.exe` release file from the [release section](https://github.com/stavlocker/SpotifyNoDupes/releases)
-    2. Put the file in a directory of your choice (Notice that it will create cache files in the folder that it's in)
-    3. Open the command prompt and run the file (using `SpotifyNoDupes.exe`) or simply double click on the file to open it.
-2. Cloning the repository:
-    1. Clone the 
+### Regular running from the release file
+The only requirements to run the release files are a Windows computer with Python 3.x installed.
+1. Download the `SpotifyNoDupes.exe` release file from the [release section](https://github.com/stavlocker/SpotifyNoDupes/releases)
+2. Put the file in a directory of your choice (Notice that it will create cache files in the folder that it's in)
+3. You'll need to create a spotify application to use the program. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/). In the Spotify developer website, remember to put `http://localhost:14523` as your redirect URI (Under Edit Settings).
+4. Export your client ID and client secret as environment variables as `SPOTIPY_CLIENT_ID` and `SPOTIPY_CLIENT_SECRET`, respectively.
 
-The script can be ran by executing the `main.py` file, and using the CLI interface to use the program. In this case, the program will ask you for your username and the playlist(s) you want to de-dupe.
+5. Open the command prompt and run the file (using `SpotifyNoDupes.exe`) or simply double click on the file to open it.
 
-The usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
+When running from command prompt, the usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
  - `Username`: Your username
  - `Playlist1, Playlist2, Playlist3...` - As many playlists as you like, as the playlist's ID or name. Notice that these playlists must be owned by you
  
-For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials. _Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API._
+For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials.
 
+*Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API.*
+
+### Running from source code
+You can optionally clone this repository and run the source code directly, which is basically the same as running the   `.exe` file.
+
+This program uses Python 3. To use SpotifyNoDupes, you need [spotipy](https://github.com/plamere/spotipy). You can install it using `pip`: `pip install spotipy`
+If you know how to use `virtualenv`s it is recommended you use one. They're pretty easy to use & learn.
+
+1. Clone the repository (*or download as zip & extract*, cloning is recommended)
+2. Navigate to the repository's folder and install the required packages:
+```
+mkvirtualenv spotifynodupes # Optional but recommended
+pip3 install spotipy
+```
+
+3. Create a spotify application so you can use `spotipy`. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/).
+4. Put your client ID & client secret into `spotifyauth.py`. The default redirect URL is `http://localhost:14523` for the local webserver.
+5. You're done - you can basically change anything else you'd like.
 
 ## FAQ
 **Q:** Which permissions do I need to give the program access on Spotify to, and why?
@@ -64,6 +69,10 @@ For every user that uses the program for the first time, authorization through t
 * [`playlist-read-collaborative`](https://beta.developer.spotify.com/documentation/general/guides/scopes/#playlist-read-collaborative) - A permission to allow the program to also view collaborative playlists, which it can't access by default.
 * [`playlist-modify-public`](https://beta.developer.spotify.com/documentation/general/guides/scopes/#playlist-modify-public) - Write access to a user's public playlists, to remove duplicates in the user's public playlists.
 * [`playlist-modify-private`](https://beta.developer.spotify.com/documentation/general/guides/scopes/#playlist-modify-private) - Write access to a user's private playlists, to remove duplicates in the user's private playlists.
+
+**Q:** I'm getting a `UnicodeEncodeError: 'charmap' codec can't encode characters`...
+
+**A:** This error is because you have unicode characters in your songs/playlists. Before running the program, run the command `chcp 65001` before running the program. Some consoles won't display unicode characters, like the default `cmd.exe` on windows. [Cmder](http://cmder.net/) for example can display unicode characters with this command.
 
 ## Contributing
 There's a reason this repository is open source. You are very welcome to contribute - if you want to squash a bug, make an improvement, or anything - feel free to fork the repository and create a pull request. Just make sure that your code is clean, and matches the rest of the code in the repository syntax-wise.
