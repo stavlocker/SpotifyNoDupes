@@ -4,8 +4,8 @@ import spotipy.util as util
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 
-os.environ["SPOTIPY_CLIENT_ID"] = ""
-os.environ["SPOTIPY_CLIENT_SECRET"] = ""
+# os.environ["SPOTIPY_CLIENT_ID"] = ""
+# os.environ["SPOTIPY_CLIENT_SECRET"] = ""
 SERVER_PORT = 14523
 os.environ["SPOTIPY_REDIRECT_URI"] = "http://localhost:{}".format(SERVER_PORT)
 
