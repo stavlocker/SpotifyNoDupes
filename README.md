@@ -27,24 +27,19 @@ _Why?_ Because...
 <sup>*\* The program output for the following playlist "My Playlist".</sup>
 
 ## Run
-### ~Regular running from the release file~
-_**NOTE**: Currently, the `.exe` file is broken as there is no way to set the credentials._
+### Regular running from the release file
 The only requirements to run the release files are a Windows computer with Python 3.x installed.
 1. Download the `SpotifyNoDupes.exe` release file from the [release section](https://github.com/stavlocker/SpotifyNoDupes/releases)
 2. Put the file in a directory of your choice (Notice that it will create cache files in the folder that it's in)
 3. You'll need to create a spotify application to use the program. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/). In the Spotify developer website, remember to put `http://localhost:14523` as your redirect URI (Under Edit Settings).
-4. Export your client ID and client secret as environment variables as `SPOTIPY_CLIENT_ID` and `SPOTIPY_CLIENT_SECRET`, respectively.
+4. Export your client ID and client secret as environment variables as `SPOTIPY_CLIENT_ID` and `SPOTIPY_CLIENT_SECRET`, respectively. Here's how to do that on Windows' `cmd`:
+    ```
+    SET SPOTIPY_CLIENT_ID=ClientIDGoesHere
+    SET SPOTIPY_CLIENT_SECRET=ClientSecretGoesHere
+    ```
 
 5. Open the command prompt and run the file (using `SpotifyNoDupes.exe`) or simply double click on the file to open it.
-
-When running from command prompt, the usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
- - `Username`: Your username
- - `Playlist1, Playlist2, Playlist3...` - As many playlists as you like, as the playlist's ID or name. Notice that these playlists must be owned by you
- 
-For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials.
-
-*Note: The program doesn't have access to your Spotify account password and doesn't use it anywhere. It is simply storing the authorization you gave to Spotify in order to communicate with the Spotify web API.*
-
+---
 ### Running from source code
 You can optionally clone this repository and run the source code directly, which is basically the same as running the   `.exe` file.
 
@@ -59,8 +54,27 @@ pip3 install spotipy
 ```
 
 3. Create a spotify application so you can use `spotipy`. You can do this at the [Spotify developer website](https://developer.spotify.com/my-applications/).
-4. Put your client ID & client secret into `spotifyauth.py`. The default redirect URL is `http://localhost:14523` for the local webserver.
+4. You have two options for inputting your client ID & secret:
+    1. Put your client ID & client secret into `spotifyauth.py` by uncommenting (by removing the # in the beginning of the line) the following lines and inserting your ID & secret:
+    ```
+    # os.environ["SPOTIPY_CLIENT_ID"] = ""
+    # os.environ["SPOTIPY_CLIENT_SECRET"] = ""
+    ```
+    2. Export your client ID and client secret as environment variables as `SPOTIPY_CLIENT_ID` and `SPOTIPY_CLIENT_SECRET`, respectively. Here's how to do that on Windows' `cmd`:
+    ```
+    SET SPOTIPY_CLIENT_ID=ClientIDGoesHere
+    SET SPOTIPY_CLIENT_SECRET=ClientSecretGoesHere
+    ```
 5. You're done - you can basically change anything else you'd like.
+
+---
+When running from command prompt, the usage for the program is `main.py [username] [Playlist1 Playlist2 Playlist3...]` where the two arguments are optional. _Note that you can't enter playlists without a username - the first argument has to be the username._
+ - `Username`: Your username
+ - `Playlist1, Playlist2, Playlist3...` - As many playlists as you like, as the playlist's ID or name. Notice that these playlists must be owned by you
+ 
+For every user that uses the program for the first time, authorization through the Spotify website is required. A window will open, asking you to copy the redirected URL back to the program. After you've done this for the first time for that specific user, the program will save your credentials.
+
+***Note**: The program does not have access to your Spotify account password. It is simply storing the authorization key you gave to Spotify in order to communicate with the Spotify web API.*
 
 ## FAQ
 **Q:** Which permissions do I need to give the program access on Spotify to, and why?
@@ -89,9 +103,6 @@ git remote add upstream git://github.com/nonamesl/SpotifyNoDupes.git
 git fetch upstream
 ```
 3. Use `git pull upstream master` to keep up with changes from this repository. Most GUI git clients will work as expected and some might offer you to submit PRs to the original repo.
-
-## Known Bugs
- * The `.exe` release file currently doesn't work as there is no way to set the credentials.
 
 ## See also
 If you liked SpotifyNoDupes, you'll love [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer), a python script to finally truly randomize your playlists (which I contributed a lot to :wink:). Thanks [@DanielsWrath](https://github.com/DanielsWrath) for inspiration from the [`SpotifyRandomizer`](https://github.com/DanielsWrath/SpotifyRandomizer) repository.

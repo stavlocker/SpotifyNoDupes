@@ -2,8 +2,7 @@ import sys
 import re
 import spotifyauth as sa
 
-sys.stdout = open(sys.stdout.fileno(), mode='w', encoding='utf8', buffering=1)
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 class Color:
     PURPLE = '\033[95m'
